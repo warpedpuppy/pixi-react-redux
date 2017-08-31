@@ -21,6 +21,7 @@ export default class HomeCanvas extends React.Component {
 		this.helpers = [];
 		var that = this;
 	    document.getElementById("homeCanvas").appendChild(app.view);
+		
 
 	   app.ticker.add(function(delta) {
 		    
@@ -29,6 +30,10 @@ export default class HomeCanvas extends React.Component {
 				}
 
 		});
+
+	   var manager = new PIXI.interaction.InteractionManager(app.stage, app.view);
+
+		 
 
    }
   resize_app(new_width){
@@ -51,9 +56,16 @@ export default class HomeCanvas extends React.Component {
 				h.x = _.random(0, this.props.resize.homeCanvasWidth);
 				h.y = _.random(0, 150);
 				h.anchor.x = h.anchor.y = .5;
+				h.scale.x = h.scale.y = _.random(0.25, 1, true);
+				h.interactive = true;
+			    h.buttonMode = true;
+				h.on("click", this.Alter)
 				this.helpers.push(h);
 				this.app.stage.addChild(h);
 	   	}
+   }
+   Alter(e){
+   	console.log(e.target);
    }
 
    Helper(){
