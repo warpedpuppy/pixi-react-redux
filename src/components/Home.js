@@ -5,12 +5,12 @@ import HelperControlPanel from "./home/HelperControlPanel";
 import { connect } from 'react-redux';
 
 // Home page component
-let Home = ({resize, helpers}) => (
+let Home = ({resize, helpers, gameState}) => (
   // render
   
       <div className="page-home">
         <HelperCounter />
-        <HomeCanvas resize={resize} helpers={helpers}/>
+        <HomeCanvas resize={resize} helpers={helpers} gameState={gameState}/>
         <HelperControlPanel />
       </div>
    
@@ -19,7 +19,8 @@ let Home = ({resize, helpers}) => (
 function mapStateToProps(state){
 	return {
 		resize:state.resize,
-		helpers:state.helpers
+		helpers:state.helpers,
+    gameState:state.gameState,
   		
 	}
 }

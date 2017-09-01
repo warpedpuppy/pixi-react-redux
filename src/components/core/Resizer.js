@@ -11,7 +11,9 @@ let Resizer = ({ dispatch }) => {
 	return (
 
 		 <WindowResizeListener onResize={windowSize => {
+		 		if(document.getElementById('homeCanvas')){
 					dispatch(resize(windowSize.windowWidth, windowSize.windowHeight,  document.getElementById('homeCanvas').offsetWidth));
+		 		}
 				}}/>
 	)
 }

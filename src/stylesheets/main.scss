@@ -6,3 +6,27 @@
 border-radius:20px;
 	border:5px solid black;
 }
+
+#deleteOrNamePanel {
+	width:60%;
+	margin:0 auto;
+}
+#deleteOrNamePanel h4{
+	clear:right;
+	text-align:left;
+}
+.closePanel {
+	float:right;
+}
+.aside {
+	font-size:10px;
+	font-style:italic;
+	text-align:right;
+}
+@media (min-width: 768px) {
+
+.navbar-right {
+    float: right!important;
+    margin-right: 0;
+}
+}

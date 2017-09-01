@@ -8,10 +8,35 @@ export let resize = (width, height, homeCanvasWidth) =>
 })
 
 
-let helpers = 0;
+let helpers = 1;
 export let add_helper = () => 
 	({
 	  type: 'ADD_HELPER',
 	  helperQ: helpers ++,
+	  id:helpers,
 })
+
+
+export let game_state_edit = (edit) => 
+	({
+		type:'EDIT_HELPER',	
+		edit: edit,
+})			
+
+export let delete_helper = (id) => 
+	({
+	  type: 'DELETE_HELPER',
+	  helperQ: helpers --,
+	  id:id,
+})
+export let change_helper_name = (id, name) => 
+	({
+	  type: 'CHANGE_NAME',
+	  name: name,
+	  id:id,
+	  helperQ:helpers,
+
+})
+
+
 

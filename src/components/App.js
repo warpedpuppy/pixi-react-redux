@@ -4,9 +4,12 @@ import "../stylesheets/main.scss";
 import { connect } from "react-redux";
 import Resizer from "./core/Resizer";
 
+
 // app component
 export class App extends React.Component {
   // render
+  
+  
   render(dispatch) {
   	const {resize} = this.props;
     return (
