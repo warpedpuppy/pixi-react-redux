@@ -23,6 +23,12 @@ export let game_state_edit = (edit) =>
 		edit: edit,
 })			
 
+export let change_color = (id, color) => 
+	({
+	  type: 'CHANGE_COLOR',
+	  color: color,
+	  id:id,
+})
 export let delete_helper = (id) => 
 	({
 	  type: 'DELETE_HELPER',

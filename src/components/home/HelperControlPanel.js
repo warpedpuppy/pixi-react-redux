@@ -4,14 +4,15 @@ import ChangeName from "./ChangeName";
 import { Col, Button, Glyphicon } from 'react-bootstrap';
 import DeleteHelper from "./DeleteHelper";
 import HomeCanvas from "./HomeCanvas";
+import {game_state_edit} from "../../actions/index";
+import { connect } from 'react-redux';
 
-let HomeControlPanel = ({ helperQ }) => {
+let HomeControlPanel = ({ dispatch }) => {
 
+	
 	function closePanel(e) {
-		e.target.parentElement.parentElement.classList.add("hidden");
-		document.getElementById("infoPanel").classList.remove("hidden");
-		document.getElementById("addHelper").classList.remove("hidden");
-		document.getElementById("deleteOrNamePanel").classList.add("hidden");
+		dispatch(game_state_edit(false));
+		
 	}
 
 	return (
@@ -19,17 +20,24 @@ let HomeControlPanel = ({ helperQ }) => {
 			<AddHelper />
 
 			<div id='deleteOrNamePanel' className="alert alert-info text-center hidden" role="alert">
+
 				<Button className="closePanel" onClick={(e) => closePanel(e)} bsStyle="danger"><Glyphicon glyph="remove" /></Button>
-				<h4>name this helper:</h4>
-				<ChangeName />
-				<h4>delete this helper: </h4>
+
+				<div className="alert alert-success text-center nameColorPanel" role="alert">
+					<ChangeName />
+				</div>
+
+				<div className="alert alert-danger text-center" role="alert">
+				<h4>delete this ball: </h4>
 				<DeleteHelper />
+				</div>
+
 			</div>
 			
 		</Col>
 	)
 }
 
-
+HomeControlPanel = connect()(HomeControlPanel)
 
 export default HomeControlPanel;

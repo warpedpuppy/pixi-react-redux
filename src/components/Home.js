@@ -10,9 +10,11 @@ let Home = ({resize, helpers, gameState}) => (
   
       <div className="page-home">
         <HelperCounter />
+            <div id='infoPanel' className="alert alert-info text-center" role="alert">add some balls!</div>
+   
         <HomeCanvas resize={resize} helpers={helpers} gameState={gameState}/>
         <HelperControlPanel />
-      </div>
+       </div>
    
 )
 

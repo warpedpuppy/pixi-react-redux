@@ -10,7 +10,7 @@ let AddButton = ({ dispatch }) => {
 		<Button id="addHelper" bsStyle='success' bsSize='large' onClick={
 			() => {dispatch(add_helper())
 			}}>
-			Add Helper&nbsp;
+			Add Ball&nbsp;
 			<Glyphicon glyph="plus" />
 
 		</Button>

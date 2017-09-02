@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 let HelperCounter = ({ helperQ }) => {
 	return (
 			<div>
- 				<h2 className="text-center"> Current Helpers: {helperQ}</h2>
+ 				<h2 className="text-center"> Current Balls: {helperQ}</h2>
 <			/div>
 		
 	)
