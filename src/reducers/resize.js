@@ -8,6 +8,7 @@ switch (action.type) {
 	  windowWidth: action.windowWidth,
 	  windowHeight: action.windowHeight,
 	  homeCanvasWidth: action.homeCanvasWidth,
+	  homeCanvasHeight: action.homeCanvasHeight
 	}
     default:
       return state;

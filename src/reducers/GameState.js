@@ -1,7 +1,7 @@
 const GameState = (state = [], action = {}) => {
 
 switch (action.type) {
-	case 'EDIT_HELPER':
+	case 'EDIT_BALL':
       return  {
       	edit: action.edit,
       }

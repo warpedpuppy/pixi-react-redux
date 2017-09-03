@@ -1,11 +1,10 @@
 import React from 'react';
-import { Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
-let HelperCounter = ({ helperQ }) => {
+let HelperCounter = ({ ballQ }) => {
 	return (
 			<div>
- 				<h2 className="text-center"> Current Balls: {helperQ}</h2>
+ 				<h2 className="text-center"> Current Balls: {ballQ}</h2>
 <			/div>
 		
 	)
@@ -13,7 +12,7 @@ let HelperCounter = ({ helperQ }) => {
 
 function mapStateToProps(state){
 	return {
-  		helperQ: state.helpers.length
+  		ballQ: state.balls.length
 	}
 }
 

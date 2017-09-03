@@ -12,71 +12,73 @@ export class HomeCanvas extends React.Component {
 	constructor(props){
 		super(props);
 		this.dispatch = props.dispatch;
-		console.log("HomeCanvas constructr props = ", props);
-		
-
+	
 	}
 
 	componentDidMount() {
 		
 		let 	width = this.width = document.getElementById('homeCanvas').offsetWidth,
-				canvasHeight = this.canvasHeight = 160;
+				canvasHeight = this.canvasHeight = document.getElementById('homeCanvas').offsetHeight;
+
 	    const 	app = this.app = new PIXI.Application(width, canvasHeight, {backgroundColor : 0x1099bb});
 	    		
 	    let		h = this.h,
 	    		ballQ = this.ballQ = 0,
 	   			itemBeingAltered = this.itemBeingAltered = undefined,
 	    		ball;
-	    this.remoteIndeces = [];
-		this.helpers = [];
-		this.balls = [];
-		var that = this;
-	    document.getElementById("homeCanvas").appendChild(app.view);
+
+	    this.remoteIndeces = [];//this is to assist in unnecessary instantiation
+		this.balls_on_stage = [];
+		this.balls = [];//this is to keep a local version of the remote array.  To see if we need to delete one
 		
 
-	   app.ticker.add(function(delta) {
+	    document.getElementById("homeCanvas").appendChild(app.view);
+		
+	    app.ticker.add(this.animate.bind(this));
+
+	 	this.dispatch(game_state_edit(false));
+   }
+
+   animate(delta) {
 		   
-		   that.helpers.map(ball => {
+		   this.balls_on_stage.map(ball => {
 
 			     	if(ball.move === true){
 					    ball.x += ball.moveX;
 					    ball.y += ball.moveY;
-					    if(ball.x > (that.width - ball.radius) || ball.x < ball.radius)ball.moveX *= -1;
-				     	if(ball.y > that.canvasHeight - ball.radius|| ball.y < ball.radius)ball.moveY *= -1;
+
+					   	if(ball.x > (this.props.resize.homeCanvasWidth - ball.radius) || ball.x < ball.radius)ball.moveX *= -1;
+
+				     	if(ball.y > this.props.resize.homeCanvasHeight - ball.radius|| ball.y < ball.radius)ball.moveY *= -1;
 					}
 				})
-		});
-
-	   var manager = new PIXI.interaction.InteractionManager(app.stage, app.view);
-
-	 this.dispatch(game_state_edit(false));
-   }
+		}
 
    componentWillUnmount(){
    		
-   		//console.log("UNMOUNT DATA", this.helpers)
 
+   		//BIT OF WEIRDNESS HERE
    		//for some reason the xmove and ymov were going absolute value between actions and reducers, 
    		//so adding flag to prep for that
    		//not awesome, but functioal
-   		this.helpers.map(ball =>{
+   		this.balls_on_stage.map(ball =>{
    			if(ball.moveX < 0)ball.negX = "TRUE";
    			if(ball.moveY < 0)ball.negY = "TRUE";
-   			console.log(ball.moveX+"  "+ball.moveY)
+   		
    		})
-   		this.dispatch(save_ball_state(this.helpers));
+
+   		//we're sending a lot of data here -- maybe this should be shrunk
+   		this.dispatch(save_ball_state(this.balls_on_stage));
    }
  
 
    state_change_handler() {
 
    		let localBalls = this.app.stage.children.length;
-   		let remoteBalls = this.props.helpers.length;
+   		let remoteBalls = this.props.balls.length;
    		
 		//add balls
-		console.log("state change handler = ", this.props.helpers)
-		this.props.helpers.map(ball => {
-				console.log(ball.moveX+"  "+ball.moveY)
+		this.props.balls.map(ball => {
 			 if(this.remoteIndeces.indexOf(ball.id) === -1) {
 				this.add_helper_from_object(ball);
 				this.remoteIndeces.push(ball.id);
@@ -84,11 +86,11 @@ export class HomeCanvas extends React.Component {
 		})
 		//remove balls
 		if(remoteBalls === localBalls - 1) {
-   				let diff = _.difference(this.balls,this.props.helpers);
+   				let diff = _.difference(this.balls,this.props.balls);
    				this.removeFromStage(diff[0]);
    		}
 
-   		this.change_name_or_color(this.props.helpers);
+   		this.change_name_or_color(this.props.balls);
    		this.resize_app();
 		this.clear_edit_screen(this.props.gameState.edit);
 
@@ -96,7 +98,7 @@ export class HomeCanvas extends React.Component {
    }
    removeFromStage(ball){
    		
-   		this.helpers.map(ball_on_stage => {
+   		this.balls_on_stage.map(ball_on_stage => {
    			if(ball.id === ball_on_stage.id) {
    				ball_on_stage.parent.removeChild(ball_on_stage);
    				this.remoteIndeces.splice(this.remoteIndeces.indexOf(ball.id), 1);
@@ -105,23 +107,23 @@ export class HomeCanvas extends React.Component {
    		this.balls.splice(this.balls.indexOf(ball), 1);
    }
 
-   add_helper_from_object(ball){
+   add_helper_from_object(ball_data){
 
-		   		let h = new this.Helper(ball);
-		   		h.x = ball.x;
-		   		h.y = ball.y;
+		   		let h = new this.Ball(ball_data);
+		   		h.x = ball_data.x;
+		   		h.y = ball_data.y;
 		   		h.on("click", this.Alter.bind(this))
-				this.ballQ = this.props.helpers.length;
+				this.ballQ = this.props.balls.length;
 
-				this.helpers.push(h);
-				this.balls.push(ball);
+				this.balls_on_stage.push(h);
+				this.balls.push(ball_data); 
 				this.app.stage.addChild(h);
 				this.change_info_screen("BALLS_EXIST");
 	}
 
 	change_name_or_color(storeHelpers) {
    		storeHelpers.map(ball1 => {
-   				this.helpers.map(ball2 => {
+   				this.balls_on_stage.map(ball2 => {
    						if(ball1.id === ball2.id) {
    							ball2.text.text = ball2.name = ball1.name;
 	   			 			ball2.sprite.tint = ball2.storeColor = parseInt(ball1.storeColor);
@@ -133,18 +135,20 @@ export class HomeCanvas extends React.Component {
   
 	   	if(this.width !== this.props.resize.homeCanvasWidth){
 	   		this.width =  this.props.resize.homeCanvasWidth;
-	   		this.app.renderer.resize( this.props.resize.homeCanvasWidth, 150);
-   			this.helpers.map(helper => {
+	   		this.app.renderer.resize( this.props.resize.homeCanvasWidth, this.props.resize.homeCanvasHeight);
+   			this.balls_on_stage.map(helper => {
    				helper.x = _.random(helper.radius, this.props.resize.homeCanvasWidth-helper.radius);
-				helper.y = _.random(helper.radius, 160-helper.radius);
+				helper.y = _.random(helper.radius, this.props.resize.homeCanvasHeight-helper.radius);
    			})
 	   	}
 	}
 
    change_info_screen(string){
    		switch (string) {
+   			case "EDIT_BALL":
+   				return document.getElementById("infoPanel").innerHTML = "Change this ball's color, re-name it, or delete it!";
 			case "BALLS_EXIST":
-   				return document.getElementById("infoPanel").innerHTML = "Click on the ball to change its color or delete it!";
+   				return document.getElementById("infoPanel").innerHTML = "Click on the ball to change its color, name it, or delete it!";
 			default:
 	      		return document.getElementById("infoPanel").innerHTML = "Add some balls!";
 	  	}
@@ -173,51 +177,54 @@ export class HomeCanvas extends React.Component {
    				this.itemBeingAltered = undefined
    			}
    			
-			this.helpers.map(ball => ball.alpha = 1);
+			this.balls_on_stage.map(ball => ball.alpha = 1);
    		}
    }
   
 
    Alter(e){
 
-   	if(this.itemBeingAltered === undefined){
+	   	if(this.itemBeingAltered === undefined){
 
-   		this.dispatch(game_state_edit(true));
+	   		this.dispatch(game_state_edit(true));
 
-		
-		let item = this.itemBeingAltered = e.target;
+			
+			let item = this.itemBeingAltered = e.target;
 
-		document.getElementById("change_name_input").setAttribute("data-id", item.id);
-		document.getElementById("deleteHelper").setAttribute("data-id", item.id)
-		document.getElementById("changeColorSelect").setAttribute("data-id", item.id);
-		if(item.text.text !== "")document.getElementById("change_name_input").value = item.text.text;
+			document.getElementById("change_name_input").setAttribute("data-id", item.id);
+			document.getElementById("deleteHelper").setAttribute("data-id", item.id)
+			document.getElementById("changeColorSelect").setAttribute("data-id", item.id);
 
-		item.move = false;
-		let midwidth = this.props.resize.homeCanvasWidth/2;
-		TweenLite.to(item, 1, {x:midwidth, y:80});
-		TweenLite.to(item.sprite.scale, 1, {x:1, y:1});
-		TweenLite.to(item.sprite, 1, {x:1, y:1, rotation:0});
+			if(item.text.text !== "")document.getElementById("change_name_input").value = item.text.text;
 
-		//move item to the top
-		let p = item.parent;
-		p.removeChild(item);
-		p.addChild(item);
+			item.move = false;
 
-		
+			let midwidth = this.props.resize.homeCanvasWidth/2;
+			TweenLite.to(item, 1, {x:midwidth, y:80});
+			TweenLite.to(item.sprite.scale, 1, {x:1, y:1});
+			TweenLite.to(item.sprite, 1, {x:1, y:1, rotation:0});
 
-		//open control panel
-		document.getElementById("infoPanel").innerHTML = "Change this ball's color, re-name it, or delete it!";
-		document.getElementById("addHelper").classList.add("hidden");
+			//move item to the top
+			let p = item.parent;
+			p.removeChild(item);
+			p.addChild(item);
 
-		document.getElementById("deleteOrNamePanel").classList.remove("hidden");
+			
+			//open control panel
+			this.change_info_screen("EDIT_BALL");
+			
+			document.getElementById("addHelper").classList.add("hidden");
 
-		
-		this.helpers.map(ball => {if(ball !== item){ball.alpha = 0.25;}})
-   	}
+			document.getElementById("deleteOrNamePanel").classList.remove("hidden");
+
+			
+			this.balls_on_stage.map(ball => {if(ball !== item){ball.alpha = 0.25;}})
+	   	}
    }
 
-   Helper(props){
+   Ball(props){
 
+   		//this ball constructore
    		let cont = new PIXI.Container();
    		cont.id = props.id;
    		cont.name = props.name;
@@ -230,6 +237,8 @@ export class HomeCanvas extends React.Component {
 
 		text.text = props.name;
 		sprite.scale.x = sprite.scale.y = cont.storeScale = props.storeScale;
+
+		//this negX/negY handler is to handle the strange issue between actions and reducer
 		cont.moveX = (props.negX === "TRUE")?props.moveX*-1:props.moveX;
 		cont.moveY = (props.negY === "TRUE")?props.moveY*-1:props.moveY;
 		cont.interactive = true;
@@ -244,7 +253,7 @@ export class HomeCanvas extends React.Component {
 		cont.text = text;
 		cont.sprite = sprite;
 		cont.move = true;
-		cont.radius = cont.width/2;
+		cont.radius = props.radius;
 		
        	return cont;
    }
@@ -252,32 +261,17 @@ export class HomeCanvas extends React.Component {
 
   
 	render(){
-
 		if(this.app)this.state_change_handler();
-		
-
-		
+		console.log(this.props)
 		return (
 			<div>
 				<Col className="helperQDiv">
 					<div id="homeCanvas"></div>
 				</Col>
-				
-				
 			</div>
 		)
-
 	}
-	
+}
 
-}
-function mapStateToProps(state) {
-	//console.log("state from HomeCanvas ", state)
-  return ({
-   	helpers:state.helpers,
-   	game_state:state.game_state,
-   	resize:state.resize
-  });
-}
-export default connect(mapStateToProps)(HomeCanvas);
+export default connect()(HomeCanvas);
 

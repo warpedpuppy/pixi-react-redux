@@ -1,8 +1,8 @@
 import React from 'react';
-import AddHelper from "./AddHelper";
-import ChangeName from "./ChangeName";
+import AddBall from "./AddBall";
+import EditBallForm from "./EditBallForm";
 import { Col, Button, Glyphicon } from 'react-bootstrap';
-import DeleteHelper from "./DeleteHelper";
+import DeleteBall from "./DeleteBall";
 import HomeCanvas from "./HomeCanvas";
 import {game_state_edit} from "../../actions/index";
 import { connect } from 'react-redux';
@@ -17,19 +17,19 @@ let HomeControlPanel = ({ dispatch }) => {
 
 	return (
 		<Col className="text-center">
-			<AddHelper />
+			<AddBall />
 
 			<div id='deleteOrNamePanel' className="alert alert-info text-center hidden" role="alert">
 
 				<Button className="closePanel" onClick={(e) => closePanel(e)} bsStyle="danger"><Glyphicon glyph="remove" /></Button>
 
 				<div className="alert alert-success text-center nameColorPanel" role="alert">
-					<ChangeName />
+					<EditBallForm />
 				</div>
 
 				<div className="alert alert-danger text-center" role="alert">
 				<h4>delete this ball: </h4>
-				<DeleteHelper />
+				<DeleteBall />
 				</div>
 
 			</div>

@@ -30,6 +30,15 @@ border-radius:20px;
 .closePanel {
 	margin-bottom:10px;
 }
+#homeCanvas {
+	height:160px;
+	width:100%;
+}
+#addHelper,
+#deleteOrNamePanel {
+	margin-top:20px;
+}
+
 @media (min-width: 768px) {
 
 .navbar-right {

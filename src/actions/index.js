@@ -1,17 +1,18 @@
 
-export let resize = (width, height, homeCanvasWidth) => 
+export let resize = (width, height, homeCanvasWidth, homeCanvasHeight) => 
 	({
 	  type: 'SCREEN_RESIZE',
 	  windowWidth: width,
 	  windowHeight: height,
 	  homeCanvasWidth: homeCanvasWidth,
+	  homeCanvasHeight: homeCanvasHeight,
 })
 
 
 let helpers = 1;
 export let add_helper = (ball_props) => 
 	({
-	  type: 'ADD_HELPER',
+	  type: 'ADD_BALL',
 	  helperQ: helpers ++,
 	  id:helpers,
 	  ball_props:ball_props
@@ -20,7 +21,7 @@ export let add_helper = (ball_props) =>
 
 export let game_state_edit = (edit) => 
 	({
-		type:'EDIT_HELPER',	
+		type:'EDIT_BALL',	
 		edit: edit,
 })			
 
@@ -40,7 +41,7 @@ export let change_color = (id, color) =>
 })
 export let delete_helper = (id) => 
 	({
-	  type: 'DELETE_HELPER',
+	  type: 'DELETE_BALL',
 	  helperQ: helpers --,
 	  id:id,
 })

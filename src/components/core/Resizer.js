@@ -6,15 +6,23 @@ import { WindowResizeListener } from 'react-window-resize-listener';
 
 let Resizer = ({ dispatch }) => {
 
-
-	let 	homeCanvasWidth = (document.getElementById('homeCanvas'))?document.getElementById('homeCanvas').offsetWidth:500;
-	return (
+return (
 
 		 <WindowResizeListener onResize={windowSize => {
 		 		if(document.getElementById('homeCanvas')){
-					dispatch(resize(windowSize.windowWidth, windowSize.windowHeight,  document.getElementById('homeCanvas').offsetWidth));
+
+
+					dispatch(
+						resize(
+							windowSize.windowWidth, 
+							windowSize.windowHeight,  
+							document.getElementById('homeCanvas').offsetWidth, 
+							document.getElementById('homeCanvas').offsetHeight
+						)
+					)
 		 		}
-				}}/>
+
+			}}/>
 	)
 }
 

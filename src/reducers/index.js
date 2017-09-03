@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
 import { routerReducer } from "react-router-redux";
 import { reducer as formReducer } from "redux-form";
-import Helpers from "./helpers";
+import Balls from "./balls";
 import Resize from "./resize";
 import GameState from "./GameState";
 
@@ -9,7 +9,7 @@ import GameState from "./GameState";
 export const reducers = combineReducers({
   routing: routerReducer,
   form: formReducer,
-  helpers: Helpers,
+  balls: Balls,
   resize: Resize,
   gameState: GameState,
   // your reducer here

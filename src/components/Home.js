@@ -1,19 +1,18 @@
 import React from "react";
-import HelperCounter from "./home/HelperCounter";
+import BallCounter from "./home/BallCounter";
 import HomeCanvas from "./home/HomeCanvas";
-import HelperControlPanel from "./home/HelperControlPanel";
+import ControlPanel from "./home/ControlPanel";
 import { connect } from 'react-redux';
 
 // Home page component
-let Home = ({resize, helpers, gameState}) => (
+let Home = ({resize, balls, gameState}) => (
   // render
   
       <div className="page-home">
-        <HelperCounter />
-            <div id='infoPanel' className="alert alert-info text-center" role="alert">add some balls!</div>
-   
-        <HomeCanvas resize={resize} helpers={helpers} gameState={gameState}/>
-        <HelperControlPanel />
+        <BallCounter />
+        <div id='infoPanel' className="alert alert-info text-center" role="alert">add some balls!</div>
+        <HomeCanvas resize={resize} balls={balls} gameState={gameState}/>
+        <ControlPanel />
        </div>
    
 )
@@ -21,7 +20,7 @@ let Home = ({resize, helpers, gameState}) => (
 function mapStateToProps(state){
 	return {
 		resize:state.resize,
-		helpers:state.helpers,
+		balls:state.balls,
     gameState:state.gameState,
   		
 	}

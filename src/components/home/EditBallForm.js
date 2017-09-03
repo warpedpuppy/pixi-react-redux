@@ -11,7 +11,6 @@ let ChangeDeleteForm = ({dispatch}) => {
 			dispatch(change_helper_name(e.target.getAttribute("data-id"), e.target.value))
 		}
 		function changeColor(e){
-			console.log("CHANGE THE COLOR")
 			dispatch(change_color(e.target.getAttribute("data-id"), e.target.value))
 		}
 	    return (

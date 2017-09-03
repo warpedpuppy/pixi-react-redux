@@ -9,18 +9,19 @@ let AddButton = ({ dispatch, resize }) => {
 
 	let move_val = _.random(0.25,1, true);
 	let scale = _.random(0.25,0.75, true);
-	let radius = 82*scale;
+	let radius = (82*scale)/2;
 
 	let ball_props = {
 		storeScale: _.random(0.25,0.75, true),
 		storeColor: "0xFFFFFF",
-		name: "init", 
-		x:_.random(radius, (resize.homeCanvasWidth - radius)),
-		y:_.random(radius, (160-radius)),
+		name: "", 
+		x:_.random(radius, (resize.homeCanvasWidth -  radius)),
+		y:_.random(radius, (resize.homeCanvasHeight - radius)),
 		moveX: move_val,
 		moveY:move_val,
 		negX:"FALSE",
 		negY:"FALSE",
+		radius:radius,
 
 	}
 	return (
@@ -29,14 +30,12 @@ let AddButton = ({ dispatch, resize }) => {
 			}}>
 			Add Ball&nbsp;
 			<Glyphicon glyph="plus" />
-
 		</Button>
 	)
 }
 function mapStateToProps(state) {
-//console.log("state from AddButton ", state)
   return ({
-   	helpers:state.helpers,
+   	balls:state.balls,
    	game_state:state.game_state,
    	resize:state.resize
   });
