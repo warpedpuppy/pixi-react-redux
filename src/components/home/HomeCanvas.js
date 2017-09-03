@@ -26,8 +26,9 @@ export class HomeCanvas extends React.Component {
 	    		ballQ = this.ballQ = 0,
 	   			itemBeingAltered = this.itemBeingAltered = undefined,
 	    		ball;
-
+	    this.remoteIndeces = [];
 		this.helpers = [];
+		this.balls = [];
 		var that = this;
 	    document.getElementById("homeCanvas").appendChild(app.view);
 		
@@ -57,39 +58,49 @@ export class HomeCanvas extends React.Component {
    		let localBalls = this.app.stage.children.length;
    		let remoteBalls = this.props.helpers.length;
    		
+		//add balls
+		this.props.helpers.map(ball1 => {
 
-   		if(remoteBalls > localBalls) {
-   				this.add_helper();
-   		} else if(remoteBalls < localBalls) {
-   				this.delete_helper();
-
-   		} else {
-   			this.change_name_or_color(this.props.helpers);
+			 if(this.remoteIndeces.indexOf(ball1.id) === -1) {
+				this.add_helper_from_object(ball1);
+				this.remoteIndeces.push(ball1.id);
+			}
+		})
+		//remove balls
+		if(remoteBalls === localBalls-1) {
+   				var diff = _.difference(this.balls,this.props.helpers);
+   				this.removeFromStage(diff[0]);
    		}
 
+   		this.change_name_or_color(this.props.helpers);
    		this.resize_app();
 		this.clear_edit_screen(this.props.gameState.edit);
+
+
+   }
+   removeFromStage(ball){
+   		
+   		this.helpers.map(ball_on_stage => {
+   			if(ball.id === ball_on_stage.id) {
+   				ball_on_stage.parent.removeChild(ball_on_stage);
+   				this.remoteIndeces.splice(this.remoteIndeces.indexOf(ball.id), 1);
+   			}
+   		})
+   		this.balls.splice(this.balls.indexOf(ball), 1);
    }
 
-
-
-	add_helper(){
-		   		let h = new this.Helper(_.last(this.props.helpers).id,  _.last(this.props.helpers).name, this.props);
+   add_helper_from_object(ball){
+		   		let h = new this.Helper(ball);
 		   		h.on("click", this.Alter.bind(this))
 				h.x = _.random(h.radius, (this.props.resize.homeCanvasWidth - h.radius));
 				h.y = _.random(h.radius, (160-h.radius));
 				this.ballQ = this.props.helpers.length;
 				this.helpers.push(h);
+				this.balls.push(ball);
 				this.app.stage.addChild(h);
 				this.change_info_screen("BALLS_EXIST");
 	}
 
-	delete_helper() {
-	   		this.itemBeingAltered.parent.removeChild(this.itemBeingAltered);
-	   		this.helpers.splice(this.helpers.indexOf(this.itemBeingAltered), 1);
-			this.ballQ = this.props.helpers.length;
-			
-	}
 	change_name_or_color(storeHelpers) {
    		storeHelpers.map(ball1 => {
    				this.helpers.map(ball2 => {
@@ -187,12 +198,14 @@ export class HomeCanvas extends React.Component {
    	}
    }
 
-   Helper(id, name){
+   Helper(props){
    		let cont = new PIXI.Container();
-   		cont.id = id;
-   		cont.name = name;
+   		cont.id = props.id;
+   		cont.name = props.name;
 		let sprite = new PIXI.Sprite.fromImage('/media/ball.png');
+		sprite.tint = props.color;
 		let text = new PIXI.Text("", {fill:0xFFFFFF});
+		text.text = props.name;
 		sprite.scale.x = sprite.scale.y = cont.storeScale = _.random(0.25,0.75, true);
 		cont.moveX = cont.moveY = _.random(0.25,1, true);
 		cont.interactive = true;
