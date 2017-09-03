@@ -9,11 +9,12 @@ export let resize = (width, height, homeCanvasWidth) =>
 
 
 let helpers = 1;
-export let add_helper = () => 
+export let add_helper = (ball_props) => 
 	({
 	  type: 'ADD_HELPER',
 	  helperQ: helpers ++,
 	  id:helpers,
+	  ball_props:ball_props
 })
 
 
@@ -22,6 +23,14 @@ export let game_state_edit = (edit) =>
 		type:'EDIT_HELPER',	
 		edit: edit,
 })			
+
+
+export let save_ball_state = (balls) => 
+	({
+		type:'SAVE_STATE',	
+		balls: balls
+
+})
 
 export let change_color = (id, color) => 
 	({

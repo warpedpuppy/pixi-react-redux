@@ -2,7 +2,7 @@ import React from 'react';
 import { Col } from 'react-bootstrap';
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import { game_state_edit } from "../../actions/index";
+import { game_state_edit, save_ball_state } from "../../actions/index";
 
 
 
@@ -13,6 +13,7 @@ export class HomeCanvas extends React.Component {
 		super(props);
 		this.dispatch = props.dispatch;
 		console.log("HomeCanvas constructr props = ", props);
+		
 
 	}
 
@@ -49,7 +50,21 @@ export class HomeCanvas extends React.Component {
 	   var manager = new PIXI.interaction.InteractionManager(app.stage, app.view);
 
 	 this.dispatch(game_state_edit(false));
+   }
 
+   componentWillUnmount(){
+   		
+   		//console.log("UNMOUNT DATA", this.helpers)
+
+   		//for some reason the xmove and ymov were going absolute value between actions and reducers, 
+   		//so adding flag to prep for that
+   		//not awesome, but functioal
+   		this.helpers.map(ball =>{
+   			if(ball.moveX < 0)ball.negX = "TRUE";
+   			if(ball.moveY < 0)ball.negY = "TRUE";
+   			console.log(ball.moveX+"  "+ball.moveY)
+   		})
+   		this.dispatch(save_ball_state(this.helpers));
    }
  
 
@@ -59,16 +74,17 @@ export class HomeCanvas extends React.Component {
    		let remoteBalls = this.props.helpers.length;
    		
 		//add balls
-		this.props.helpers.map(ball1 => {
-
-			 if(this.remoteIndeces.indexOf(ball1.id) === -1) {
-				this.add_helper_from_object(ball1);
-				this.remoteIndeces.push(ball1.id);
+		console.log("state change handler = ", this.props.helpers)
+		this.props.helpers.map(ball => {
+				console.log(ball.moveX+"  "+ball.moveY)
+			 if(this.remoteIndeces.indexOf(ball.id) === -1) {
+				this.add_helper_from_object(ball);
+				this.remoteIndeces.push(ball.id);
 			}
 		})
 		//remove balls
-		if(remoteBalls === localBalls-1) {
-   				var diff = _.difference(this.balls,this.props.helpers);
+		if(remoteBalls === localBalls - 1) {
+   				let diff = _.difference(this.balls,this.props.helpers);
    				this.removeFromStage(diff[0]);
    		}
 
@@ -90,11 +106,13 @@ export class HomeCanvas extends React.Component {
    }
 
    add_helper_from_object(ball){
+
 		   		let h = new this.Helper(ball);
+		   		h.x = ball.x;
+		   		h.y = ball.y;
 		   		h.on("click", this.Alter.bind(this))
-				h.x = _.random(h.radius, (this.props.resize.homeCanvasWidth - h.radius));
-				h.y = _.random(h.radius, (160-h.radius));
 				this.ballQ = this.props.helpers.length;
+
 				this.helpers.push(h);
 				this.balls.push(ball);
 				this.app.stage.addChild(h);
@@ -105,8 +123,8 @@ export class HomeCanvas extends React.Component {
    		storeHelpers.map(ball1 => {
    				this.helpers.map(ball2 => {
    						if(ball1.id === ball2.id) {
-   							ball2.text.text = ball1.name;
-	   			 			ball2.sprite.tint = parseInt(ball1.color);
+   							ball2.text.text = ball2.name = ball1.name;
+	   			 			ball2.sprite.tint = ball2.storeColor = parseInt(ball1.storeColor);
    						}
    				})
    		})
@@ -199,23 +217,30 @@ export class HomeCanvas extends React.Component {
    }
 
    Helper(props){
+
    		let cont = new PIXI.Container();
    		cont.id = props.id;
    		cont.name = props.name;
+
 		let sprite = new PIXI.Sprite.fromImage('/media/ball.png');
-		sprite.tint = props.color;
-		let text = new PIXI.Text("", {fill:0xFFFFFF});
+
+		sprite.tint = cont.storeColor = parseInt(props.storeColor);
+
+		let text = new PIXI.Text(props.name, {fill:0xFFFFFF});
+
 		text.text = props.name;
-		sprite.scale.x = sprite.scale.y = cont.storeScale = _.random(0.25,0.75, true);
-		cont.moveX = cont.moveY = _.random(0.25,1, true);
+		sprite.scale.x = sprite.scale.y = cont.storeScale = props.storeScale;
+		cont.moveX = (props.negX === "TRUE")?props.moveX*-1:props.moveX;
+		cont.moveY = (props.negY === "TRUE")?props.moveY*-1:props.moveY;
 		cont.interactive = true;
 	    cont.buttonMode = true;
-		
+	
 		text.anchor.x = text.anchor.y =.5;
-		//text.y = 25;
 		sprite.anchor.x = sprite.anchor.y = .5;
 		cont.addChild(sprite);
 		cont.addChild(text);
+
+
 		cont.text = text;
 		cont.sprite = sprite;
 		cont.move = true;
@@ -223,11 +248,14 @@ export class HomeCanvas extends React.Component {
 		
        	return cont;
    }
+
+
   
 	render(){
 
 		if(this.app)this.state_change_handler();
 		
+
 		
 		return (
 			<div>
@@ -244,12 +272,12 @@ export class HomeCanvas extends React.Component {
 
 }
 function mapStateToProps(state) {
-console.log("state from HomeCanvas ", state)
-  return {
+	//console.log("state from HomeCanvas ", state)
+  return ({
    	helpers:state.helpers,
    	game_state:state.game_state,
    	resize:state.resize
-  };
+  });
 }
 export default connect(mapStateToProps)(HomeCanvas);
 
