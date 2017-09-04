@@ -11,7 +11,7 @@ export default class Menu extends React.Component {
 				return (
 					<Navbar collapseOnSelect>
 					    <Navbar.Header>
-					      <Navbar.Brand > animation</Navbar.Brand>
+					      <Navbar.Brand >pixi/react/redux</Navbar.Brand>
 					      <Navbar.Toggle />
 					    </Navbar.Header>
 					    <Navbar.Collapse>
