@@ -12,7 +12,7 @@ export class HomeCanvas extends React.Component {
 	constructor(props){
 		super(props);
 		this.dispatch = props.dispatch;
-	
+
 	}
 
 	componentDidMount() {
@@ -20,7 +20,7 @@ export class HomeCanvas extends React.Component {
 		let 	width = this.width = document.getElementById('homeCanvas').offsetWidth,
 				canvasHeight = this.canvasHeight = document.getElementById('homeCanvas').offsetHeight;
 
-	    const 	app = this.app = new PIXI.Application(width, canvasHeight, {backgroundColor : 0x1099bb});
+	    const 	app = this.app = new PIXI.Application(width, canvasHeight, {transparent:true});
 	    		
 	    let		h = this.h,
 	    		ballQ = this.ballQ = 0,
@@ -250,7 +250,7 @@ export class HomeCanvas extends React.Component {
 
 		sprite.tint = cont.storeColor = parseInt(props.storeColor);
 
-		let text = new PIXI.Text(props.name, {fill:0x000000});
+		let text = new PIXI.Text(props.name, {fill:0x000000, align: 'center', stroke: '#FFFFFF', strokeThickness: 6 });
 
 		text.text = props.name;
 		sprite.scale.x = sprite.scale.y = cont.storeScale = props.storeScale;
@@ -289,6 +289,14 @@ export class HomeCanvas extends React.Component {
 		)
 	}
 }
-
-export default connect()(HomeCanvas);
+function mapStateToProps(state){
+  return {
+    resize:state.resize,
+    balls:state.balls,
+    gameState:state.gameState,
+      
+  }
+}
+HomeCanvas = connect(mapStateToProps)(HomeCanvas)
+export default HomeCanvas;
 

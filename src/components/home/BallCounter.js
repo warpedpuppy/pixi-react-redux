@@ -5,8 +5,7 @@ let HelperCounter = ({ ballQ }) => {
 	return (
 			<div>
  				<h2 className="text-center"> Current Balls: {ballQ}</h2>
-<			/div>
-		
+			</div>
 	)
 }
 

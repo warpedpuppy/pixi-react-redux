@@ -12,11 +12,11 @@ let HomeControlPanel = ({ dispatch }) => {
 	
 	function closePanel(e) {
 		dispatch(game_state_edit(false));
-		
 	}
 
 	return (
 		<Col className="text-center">
+
 			<AddBall />
 
 			<div id='deleteOrNamePanel' className="alert alert-info text-center hidden" role="alert">
@@ -33,7 +33,6 @@ let HomeControlPanel = ({ dispatch }) => {
 				</div>
 
 			</div>
-			
 		</Col>
 	)
 }
