@@ -6,27 +6,32 @@ import _ from 'lodash';
 
 let AddButton = ({ dispatch, resize }) => {
 	
+	function generate_props(){
+			
+		let move_val = _.random(0.25,1, true),
+			scale = _.random(0.25,0.75, true),
+			radius = (82*scale)/2,
+			rotate =  _.random(0.05,.2, true),
+			ball_props = {
+				storeScale: _.random(0.25,0.75, true),
+				storeColor: "0xFFFFFF",
+				name: "", 
+				x:_.random(radius, (resize.homeCanvasWidth - radius)),
+				y:_.random(radius, (resize.homeCanvasHeight - radius)),
+				moveX: move_val,
+				moveY:move_val,
+				negX:"FALSE",
+				negY:"FALSE",
+				radius:radius,
+				rotate:rotate
+			}
 
-	let move_val = _.random(0.25,1, true);
-	let scale = _.random(0.25,0.75, true);
-	let radius = (82*scale)/2;
-
-	let ball_props = {
-		storeScale: _.random(0.25,0.75, true),
-		storeColor: "0xFFFFFF",
-		name: "", 
-		x:_.random(radius, (resize.homeCanvasWidth -  radius)),
-		y:_.random(radius, (resize.homeCanvasHeight - radius)),
-		moveX: move_val,
-		moveY:move_val,
-		negX:"FALSE",
-		negY:"FALSE",
-		radius:radius,
-
+		return ball_props;
 	}
+
 	return (
 		<Button id="addHelper" bsStyle='success' bsSize='large' onClick={
-			() => {dispatch(add_helper(ball_props))
+			() => {dispatch(add_helper(generate_props()))
 			}}>
 			Add Ball&nbsp;
 			<Glyphicon glyph="plus" />
@@ -35,8 +40,6 @@ let AddButton = ({ dispatch, resize }) => {
 }
 function mapStateToProps(state) {
   return ({
-   	balls:state.balls,
-   	game_state:state.game_state,
    	resize:state.resize
   });
 }

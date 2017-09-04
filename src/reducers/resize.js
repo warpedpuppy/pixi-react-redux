@@ -11,7 +11,7 @@ switch (action.type) {
 	  homeCanvasHeight: action.homeCanvasHeight
 	}
     default:
-      return state;
+      return  state;
   }
 }
 

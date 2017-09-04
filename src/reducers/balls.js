@@ -25,10 +25,9 @@ switch (action.type) {
   case 'SAVE_STATE':
     let i = 0;
     let balls = state.map((ball) => {
-        let s = {...ball, x:action.balls[i].x, y:action.balls[i].y, scale:action.balls[i].storeScale, name:action.balls[i].name, color:action.balls[i].color, negX: action.balls[i].negX, negY: action.balls[i].negY, radius: action.balls[i].radius}
+        let s = {...ball, ...action.balls[i]}
                 i++;
                 return s;
-      
       });
       return  balls;
   case 'CHANGE_NAME':

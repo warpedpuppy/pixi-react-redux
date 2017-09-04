@@ -46,10 +46,11 @@ export class HomeCanvas extends React.Component {
 			     	if(ball.move === true){
 					    ball.x += ball.moveX;
 					    ball.y += ball.moveY;
+				    	ball.sprite.rotation += (delta*ball.rotate);
+				    	let new_radius = ball.radius*ball.storeScale;
+					   	if(ball.x > (this.props.resize.homeCanvasWidth - new_radius) || ball.x < new_radius)ball.moveX *= -1;
 
-					   	if(ball.x > (this.props.resize.homeCanvasWidth - ball.radius) || ball.x < ball.radius)ball.moveX *= -1;
-
-				     	if(ball.y > this.props.resize.homeCanvasHeight - ball.radius|| ball.y < ball.radius)ball.moveY *= -1;
+				     	if(ball.y > this.props.resize.homeCanvasHeight - new_radius|| ball.y < new_radius)ball.moveY *= -1;
 					}
 				})
 		}
@@ -57,18 +58,35 @@ export class HomeCanvas extends React.Component {
    componentWillUnmount(){
    		
 
-   		//BIT OF WEIRDNESS HERE
-   		//for some reason the xmove and ymov were going absolute value between actions and reducers, 
-   		//so adding flag to prep for that
-   		//not awesome, but functioal
-   		this.balls_on_stage.map(ball =>{
+   		
+
+   		 //we don't need all of the data from the display object for the store
+   		var object_of_ball_properties = this.balls_on_stage.map(ball => {
+
+			//BIT OF WEIRDNESS HERE
+			//for some reason the xmove and ymov were going absolute value between actions and reducers, 
+			//so adding flag to prep for that
+			//not awesome, but functioal
    			if(ball.moveX < 0)ball.negX = "TRUE";
    			if(ball.moveY < 0)ball.negY = "TRUE";
-   		
+
+   			let obj = {
+   				negX:ball.negX,
+   				negY:ball.negY,
+   				y:ball.y,
+   				x:ball.x,
+   				scale:ball.storeScale,
+   				name:ball.name,
+   				color:ball.color,
+   				radius:ball.radius,
+   				rotate:ball.rotate,
+   			}
+
+   			return obj;
    		})
 
    		//we're sending a lot of data here -- maybe this should be shrunk
-   		this.dispatch(save_ball_state(this.balls_on_stage));
+   		this.dispatch(save_ball_state(object_of_ball_properties));
    }
  
 
@@ -223,17 +241,16 @@ export class HomeCanvas extends React.Component {
    }
 
    Ball(props){
-
    		//this ball constructore
    		let cont = new PIXI.Container();
    		cont.id = props.id;
    		cont.name = props.name;
 
-		let sprite = new PIXI.Sprite.fromImage('/media/ball.png');
+		let sprite = new PIXI.Sprite.fromImage('/media/peppermint.png');
 
 		sprite.tint = cont.storeColor = parseInt(props.storeColor);
 
-		let text = new PIXI.Text(props.name, {fill:0xFFFFFF});
+		let text = new PIXI.Text(props.name, {fill:0x000000});
 
 		text.text = props.name;
 		sprite.scale.x = sprite.scale.y = cont.storeScale = props.storeScale;
@@ -254,6 +271,7 @@ export class HomeCanvas extends React.Component {
 		cont.sprite = sprite;
 		cont.move = true;
 		cont.radius = props.radius;
+		cont.rotate = props.rotate;
 		
        	return cont;
    }
@@ -262,7 +280,6 @@ export class HomeCanvas extends React.Component {
   
 	render(){
 		if(this.app)this.state_change_handler();
-		console.log(this.props)
 		return (
 			<div>
 				<Col className="helperQDiv">

@@ -31,7 +31,7 @@ let ChangeDeleteForm = ({dispatch}) => {
 				<option value="0xFFFFFF">white</option>
 				<option value="0xFF9900">orange</option>
 				<option value="0x551A8B">purple</option>
-				<option value="0xFF69B4">pink</option>
+				<option value="0xFF00FF">pink</option>
 				<option value="0x0000FF">blue</option>
 				<option value="0xFFFF00">yellow</option>
 				<option value="0x00FF00">green</option>

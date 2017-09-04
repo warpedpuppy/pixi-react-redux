@@ -18,12 +18,12 @@ let Home = ({resize, balls, gameState}) => (
 )
 
 function mapStateToProps(state){
-	return {
-		resize:state.resize,
-		balls:state.balls,
+  return {
+    resize:state.resize,
+    balls:state.balls,
     gameState:state.gameState,
-  		
-	}
+      
+  }
 }
 Home = connect(mapStateToProps)(Home)
 export default Home;
