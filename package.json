@@ -9,10 +9,12 @@
     "starter kit",
     "boilerplate"
   ],
+   "engines": {
+    "node": "6.10.0"
+  },
   "main": "index.js",
   "homepage": "",
-  "repository": {
-  },
+  "repository": {},
   "scripts": {
     "start-dev": "webpack-dev-server --inline --hot --history-api-fallback --host localhost --port 8080",
     "build-dev": "webpack --config webpack.dev.config.js",
@@ -44,7 +46,8 @@
     "react-window-resize-listener": "^1.1.0",
     "redux": "^3.6.0",
     "redux-form": "^6.4.3",
-    "redux-saga": "^0.14.3"
+    "redux-saga": "^0.14.3",
+    "webpack": "^1.15.0"
   },
   "devDependencies": {
     "babel-core": "^6.21.0",
