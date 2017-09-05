@@ -1,7 +1,7 @@
 {
-  "name": "redux-minimal",
+  "name": "sprial-balls",
   "version": "1.0.0",
-  "description": "Start building complex react-redux apps today, with this minimalist easy to understand starter kit (boilerplate)",
+  "description": "",
   "keywords": [
     "react",
     "redux",
@@ -10,17 +10,17 @@
     "boilerplate"
   ],
   "main": "index.js",
-  "homepage": "http://redux-minimal.js.org/",
+  "homepage": "",
   "repository": {
-    "type": "git",
-    "url": "https://github.com/catalin-luntraru/redux-minimal"
   },
   "scripts": {
-    "start": "webpack-dev-server --inline --hot --history-api-fallback --host localhost --port 8080",
+    "start-dev": "webpack-dev-server --inline --hot --history-api-fallback --host localhost --port 8080",
     "build-dev": "webpack --config webpack.dev.config.js",
-    "build-prod": "NODE_ENV=production webpack -p --config webpack.prod.config.js",
+    "build-prod": "webpack -p --config webpack.prod.config.js",
     "test": "mocha --recursive --compilers js:babel-register --require babel-polyfill --require ignore-styles",
-    "test-watch": "npm test -- --watch"
+    "test-watch": "npm test -- --watch",
+    "postinstall": "webpack -p --config webpack.prod.config.js",
+    "start": "node public/server.js"
   },
   "babel": {
     "presets": [
@@ -29,9 +29,10 @@
       "stage-3"
     ]
   },
-  "author": "Catalin Luntraru",
+  "author": "",
   "license": "MIT",
   "dependencies": {
+    "http": "0.0.0",
     "lodash": "^4.17.4",
     "react": "^15.4.2",
     "react-bootstrap": "^0.30.7",
