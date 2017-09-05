@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'React-Bootstrap';
+import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 import { IndexLinkContainer, LinkContainer } from "react-router-bootstrap";
 import HomeCanvas from "../home/HomeCanvas";
 
