@@ -1,17 +1,12 @@
-#homeCanvas {
-	
-	
-}
-#homeCanvas canvas {
-border-radius:20px;
-	border:5px solid black;
-	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#2dd0e2+0,483bce+100 */
-background: #2dd0e2; /* Old browsers */
-background: -moz-linear-gradient(-45deg,  #2dd0e2 0%, #483bce 100%); /* FF3.6-15 */
-background: -webkit-linear-gradient(-45deg,  #2dd0e2 0%,#483bce 100%); /* Chrome10-25,Safari5.1-6 */
-background: linear-gradient(135deg,  #2dd0e2 0%,#483bce 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2dd0e2', endColorstr='#483bce',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 
+#homeCanvas canvas {
+	border-radius:20px;
+	border:5px solid black;
+	background: #2dd0e2; 
+	background: -moz-linear-gradient(-45deg,  #2dd0e2 0%, #483bce 100%); 
+	background: -webkit-linear-gradient(-45deg,  #2dd0e2 0%,#483bce 100%); 
+	background: linear-gradient(135deg,  #2dd0e2 0%,#483bce 100%); 
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2dd0e2', endColorstr='#483bce',GradientType=1 );
 }
 
 #deleteOrNamePanel {
@@ -47,7 +42,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2dd0e2', end
 }
 
 @media (min-width: 768px) {
-
 .navbar-right {
     float: right!important;
     margin-right: 0;
