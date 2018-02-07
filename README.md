@@ -2,7 +2,7 @@
 
 Download, navigate in the terminal to the directory it is in and then type in "npm start".
 
-This can be viewed here:  http://spiralballs-env.us-east-2.elasticbeanstalk.com/
+This can be viewed here:  https://aqueous-shelf-38864.herokuapp.com/
 
 This is an exercise to have the store of redux control everything that is happening in a pixi canvas:
 
